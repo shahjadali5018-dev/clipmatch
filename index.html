@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="hi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ClipMatch</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e1a;--panel:#0f1629;--in:#151d35;--ink:#eef1fa;--mute:#8d98b8;--acc:#7c3aed;--ok:#34d399;--line:#1e2842;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f1f3fa;--panel:#fff;--in:#eef0f9;--ink:#141a2e;--mute:#59648a;--line:#d6dbee;color-scheme:light}}
+:root[data-theme="dark"]{--bg:#0a0e1a;--panel:#0f1629;--in:#151d35;--ink:#eef1fa;--mute:#8d98b8;--line:#1e2842}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 Mukta,system-ui,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;background:var(--bg)}
+.logo{font-size:19px;font-weight:800;white-space:nowrap}.lg{color:var(--acc)}.sp{flex:1}
+nav{display:none;gap:22px;margin-left:24px}nav button{background:none;border:0;color:var(--ink);font:inherit;cursor:pointer;padding:4px}
+@media(min-width:860px){nav{display:flex;margin:0 auto 0 28px}}@media(max-width:520px){.ht{display:none}}
+.hb,.x{background:none;border:0;color:var(--ink);font-size:24px;cursor:pointer;padding:2px 6px;line-height:1}
+.pill{background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:9px;padding:7px 12px;font:700 14px Mukta,sans-serif;cursor:pointer}
+aside{position:fixed;top:0;bottom:0;left:0;width:285px;max-width:84%;background:var(--panel);border-right:1px solid var(--line);z-index:20;transform:translateX(-102%);transition:transform .2s;padding:calc(16px + env(safe-area-inset-top,0px)) 14px 16px;display:flex;flex-direction:column;gap:6px;visibility:hidden}
+aside.open{transform:none;visibility:visible}#sc{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:19}
+.dh{display:flex;gap:10px;align-items:center;margin-bottom:8px}.dh>div:nth-child(2){flex:1}.av{width:42px;height:42px;border-radius:50%;background:var(--acc);display:grid;place-items:center;font-weight:800;color:#fff}.sm{font-size:13px;color:var(--mute)}
+aside>button{text-align:left;background:none;border:0;color:var(--ink);font:inherit;padding:11px 8px;border-radius:8px;cursor:pointer}aside>button:hover{background:var(--in)}
+.cr2{background:var(--in);border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;margin-bottom:6px}
+#go{background:linear-gradient(90deg,#1b1740,#3b1d78 50%,#1b1740);border-color:#3b2a78}
+.tc{flex:none;align-self:center;width:24px;height:24px;border:1px solid var(--acc);border-radius:6px;display:grid;place-items:center;color:var(--acc);font-size:13px}
+#info{text-align:left}#info input{margin:4px 0 10px}.pr{padding:8px 0;border-bottom:1px solid var(--line)}.pr span{display:block;font-size:13px;color:var(--mute)}
+main{max-width:1080px;margin:0 auto;padding:22px 14px 44px}
+h1{font-size:28px;font-weight:800;text-align:center;margin:6px 0 2px}.sub{text-align:center;color:var(--mute);margin:0 0 20px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.g{display:grid;gap:14px}@media(min-width:860px){.g{grid-template-columns:1.6fr 1fr}}
+h2{font-size:15px;margin:0 0 10px;font-weight:700}h2 small{color:var(--mute);font-weight:400}
+.btn{font:700 15px Mukta,sans-serif;border-radius:10px;padding:10px 14px;border:1px solid var(--line);background:var(--in);color:var(--ink);cursor:pointer}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#fff}.btn.big{width:100%;padding:13px;font-size:17px}
+.btn:disabled{opacity:.5;cursor:default}.btn:focus-visible,.up:focus-visible{outline:2px solid var(--ok);outline-offset:2px}
+.refv{width:100%;max-height:340px;background:#000;border-radius:10px;display:block}
+.drop{display:grid;place-items:center;text-align:center;min-height:200px;border:1px dashed var(--line);border-radius:10px;color:var(--mute);cursor:pointer;background:var(--in)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}.tags span{background:var(--in);border:1px solid var(--line);border-radius:7px;padding:2px 10px;font-size:14px}
+.bar{margin:8px 0}.bar div:first-child{display:flex;justify-content:space-between;font-size:14px;color:var(--mute)}
+.bar i{display:block;height:5px;border-radius:3px;background:var(--in);margin-top:3px;overflow:hidden}.bar i u{display:block;height:100%;background:var(--acc)}
+.clips{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:12px}
+.up{aspect-ratio:9/14;border:1px dashed var(--line);border-radius:8px;display:grid;place-items:center;text-align:center;color:var(--mute);cursor:pointer;background:var(--in);font:inherit;padding:6px}
+.cl{position:relative;aspect-ratio:9/14;border-radius:8px;overflow:hidden;background:#000}
+.cl video,.cl img,.sg video,.sg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cl i,.sg i{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);color:#fff;font-size:12px;font-style:normal;padding:2px 6px}
+.strip{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px}.sg{position:relative;flex:none;width:64px;aspect-ratio:9/14;border-radius:6px;overflow:hidden;background:var(--in)}
+.stage{display:flex;justify-content:center;background:#000;border-radius:10px;padding:8px}canvas{width:100%;max-width:290px;aspect-ratio:9/16;background:#05080a;border-radius:6px}
+.row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.row .btn{flex:1}
+table{width:100%;border-collapse:collapse;font-size:15px}td{padding:6px 0;border-bottom:1px solid var(--line)}td+td{text-align:right}.ok{color:var(--ok)}
+textarea,select{background:var(--in);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit}textarea{width:100%;resize:vertical}input[type=color]{width:44px;height:40px;border:1px solid var(--line);border-radius:8px;background:var(--in);padding:2px}
+dialog{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;max-width:340px;width:92%;text-align:center}dialog::backdrop{background:rgba(0,0,0,.6)}dialog input{width:100%;margin:8px 0;background:var(--in);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;font:inherit}
+#qr{position:relative;display:inline-block;background:#fff;padding:10px;border-radius:10px}#qr img{display:block}.yes{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:#fff;color:#111;font:800 15px/48px Mukta,sans-serif}
+#msg{color:var(--mute);font-size:14px;margin-top:8px;min-height:20px}
+#pay{max-width:360px;padding:20px 18px;max-height:92vh;overflow:auto;text-align:left}
+#pay h2{font-size:20px;margin:0}.amt{display:flex;justify-content:space-between;align-items:baseline;margin:12px 0 14px;padding:12px 14px;background:var(--in);border-radius:12px}.amt b{font-size:24px}
+#qr{display:block;width:192px;height:192px;margin:8px auto;padding:8px;box-sizing:border-box}
+#qr canvas{width:176px;height:176px;display:block;border-radius:6px}
+.yes{width:38px;height:38px;font:800 12px/38px Mukta,sans-serif}
+.uid{display:flex;gap:8px;align-items:center;justify-content:space-between;background:var(--in);border-radius:10px;padding:8px 12px;font-weight:700}
+.or{text-align:center;color:var(--mute);font-size:13px;margin:8px 0}
+</style></head><body>
+<header><button class="hb" id="hb" aria-label="Menu">☰</button><b class="logo"><span class="lg">◈</span> ClipMatch AI</b>
+<nav><button data-m="dash">Dashboard</button><button data-m="proj">Projects</button><button data-m="price">Pricing</button><button data-m="help">Help</button></nav><span class="sp"></span>
+<button class="pill" id="cr">🪙 120 Credits</button><button class="btn p" id="hx">⬇<span class="ht"> Export Video</span></button></header>
+<aside id="dr" aria-label="Menu"><div class="dh"><div class="av" id="av">G</div><div><b id="pn">Guest</b><div class="sm" id="pid"></div></div><button class="x" id="dx" aria-label="बंद">✕</button></div>
+<div class="cr2"><span>Credits</span><b id="cr3">120</b></div>
+<button data-m="dash">🏠 Dashboard</button><button data-m="proj">🎞 Projects</button><button data-m="price">💳 Pricing / क्रेडिट लो</button><button data-m="prof">👤 My profile</button><button data-m="help">❓ Help</button></aside><div id="sc" hidden></div>
+<dialog id="info"><h2 id="it" style="margin-top:0"></h2><div id="ib"></div><button class="btn" id="ic" style="margin-top:10px">बंद करो</button></dialog>
+<main>
+<h1>Upload Reference. Add Clips. Get Matched Edit.</h1>
+<p class="sub">रेफरेंस वीडियो के कट, ट्रांज़िशन और कलर ग्रेड पढ़कर आपकी क्लिप पर लगाए जाते हैं।</p>
+
+<div class="g">
+ <section class="box"><h2>Reference Video <small>(पहले 30 सेकंड पढ़े जाएँगे)</small></h2>
+  <div class="drop" id="rdrop">रेफरेंस वीडियो यहाँ दबाकर चुनो</div>
+  <video class="refv" id="rv" controls playsinline hidden></video>
+  <div class="row"><button class="btn" id="rrep" hidden>Replace Video</button></div></section>
+ <section class="box"><h2>Analysis Results</h2><div id="an" style="color:var(--mute)">रेफरेंस और क्लिप डालकर नीचे बटन दबाओ।</div></section>
+</div>
+
+<section class="box"><h2>Your Clips <small>(अपनी साधारण क्लिप या फ़ोटो)</small></h2>
+ <div class="clips" id="clips"></div>
+ <button class="btn p big" id="go" disabled>✦ Analyze &amp; Match Editing Style</button><div id="msg"></div></section>
+
+<section class="box"><h2>कैप्शन <small>(हर लाइन एक बार में आएगी)</small></h2>
+ <textarea id="cap" rows="4" placeholder="पहली लाइन पहले हिस्से पर, दूसरी लाइन अगले पर…"></textarea>
+ <div class="row" style="align-items:center"><select id="cn" aria-label="कितने कट पर"><option value="1">1 कट पर एक लाइन</option><option value="2">2 कट पर एक लाइन</option><option value="3">3 कट पर एक लाइन</option><option value="4">4 कट पर एक लाइन</option></select>
+ <select id="cpos" aria-label="जगह"><option value="b">नीचे</option><option value="m">बीच में</option><option value="t">ऊपर</option></select>
+ <select id="csz" aria-label="साइज़"><option value="24">छोटा</option><option value="32" selected>मध्यम</option><option value="42">बड़ा</option></select>
+ <input type="color" id="ccol" value="#ffffff" aria-label="रंग"></div></section>
+
+<section class="box"><h2>Generated Preview</h2><div class="strip" id="strip"></div>
+ <div class="g"><div><p style="color:var(--mute);font-size:14px;margin:0 0 8px">एक्सपोर्ट में हर सेकंड पर 1 क्रेडिट लगता है (कम से कम 5)।</p><div class="stage"><canvas id="cv" width="360" height="640"></canvas></div>
+  <div class="row"><button class="btn" id="em">✎ Edit Manually</button><button class="btn" id="play">▶ चलाओ</button><button class="btn" id="exp">WebM</button><button class="btn p" id="exp2">MP4 (सर्वर)</button></div></div>
+  <div><h2>Applied Editing Style</h2><table id="ap"><tr><td>अभी कुछ नहीं लगा</td><td></td></tr></table></div></div></section>
+</main>
+<dialog id="plans"><h2 style="margin-top:0">प्लान चुनो</h2><div id="pl"></div><button class="btn" id="plx" style="margin-top:8px">बंद करो</button></dialog>
+<dialog id="pay"><h2>Complete payment</h2>
+<div class="amt"><span><span id="pc"></span> credits</span><b>₹<span id="pr"></span></b></div>
+<a class="btn p big" id="upil" style="display:block;text-decoration:none;text-align:center">Pay with UPI app</a>
+<div class="or">या दूसरे फ़ोन से QR स्कैन करो</div>
+<div id="qr"></div>
+<div class="uid"><span>shahjad2010@fam</span><button class="btn" id="cp" style="padding:6px 12px">Copy</button></div>
+<div class="or" style="margin-top:14px">पेमेंट के बाद UTR नंबर डालो</div>
+<input id="utr" inputmode="numeric" placeholder="12-digit UTR / Transaction ID">
+<button class="btn big" id="sub">Confirm payment</button>
+<p id="pm" style="color:var(--mute);font-size:14px;min-height:20px;margin:8px 0;text-align:center"></p>
+<button class="btn" id="pcl" style="width:100%">Close</button></dialog>
+<input type="file" id="rf" accept="video/*" hidden><input type="file" id="cf" accept="video/*,image/*" multiple hidden>
+<script>
+const $=id=>document.getElementById(id),cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+let ref=null,files=[],P={cuts:[1,1,1,1,1,1],f:'none',tr:'fade',z:.08,tint:false},playing=false,exporting=false,t0=0,last=-1,raf=0,mp4=false,rec,chunks;
+const API=location.protocol==='file:'?'http://localhost:3000':'';
+async function api(p,o){const r=await fetch(API+p,o);if(!r.headers.get('x-clipmatch'))throw 0;return r}
+const cv=$('cv'),c=cv.getContext('2d'),tot=()=>P.cuts.reduce((a,b)=>a+b,0);
+const msg=s=>$('msg').textContent=s;
+function mk(f){const u=URL.createObjectURL(f),v=f.type.startsWith('video'),e=document.createElement(v?'video':'img');e.src=u;
+ if(v){e.muted=true;e.loop=true;e.playsInline=true;e.preload='auto'}return{u,v,e,n:f.name}}
+$('rdrop').onclick=$('rrep').onclick=()=>$('rf').click();
+$('rf').onchange=e=>{const f=e.target.files[0];if(!f)return;ref=mk(f);const v=$('rv');v.src=ref.u;ref.e=v;v.hidden=false;$('rdrop').hidden=true;$('rrep').hidden=false;chk()};
+$('cf').onchange=e=>{files=[...e.target.files].map(mk);e.target.value='';renderClips();chk();last=-1;draw(0)};
+function renderClips(){const w=$('clips');w.innerHTML='';const u=document.createElement('button');u.className='up';u.innerHTML='⬆<br><b>Upload Clips</b><br><small>कई चुन सकते हो</small>';u.onclick=()=>$('cf').click();w.appendChild(u);
+ files.forEach((m,i)=>{const d=document.createElement('div');d.className='cl';const x=document.createElement(m.v?'video':'img');x.src=m.u;if(m.v){x.muted=true;x.preload='metadata'}d.appendChild(x);const l=document.createElement('i');l.textContent='क्लिप '+(i+1);d.appendChild(l);w.appendChild(d)})}
+function chk(){$('go').disabled=!(ref&&files.length)}
+const seek=(v,t)=>new Promise(r=>{const h=()=>{v.removeEventListener('seeked',h);r()};v.addEventListener('seeked',h);v.currentTime=t});
+$('go').onclick=async()=>{if(!spend(5))return;$('go').disabled=true;stop();const v=ref.e;
+ if(!(v.duration>0)){msg('रेफरेंस वीडियो अभी लोड नहीं हुआ, फिर दबाओ।');$('go').disabled=false;return}
+ const dur=Math.min(v.duration,30),n=Math.min(200,Math.floor(dur/.1)),st=dur/n,sc=document.createElement('canvas');sc.width=32;sc.height=56;
+ const x=sc.getContext('2d',{willReadFrequently:true});let prev=null;const S=[];v.pause();
+ for(let i=0;i<n;i++){msg('रेफरेंस पढ़ा जा रहा है… '+Math.round(i/n*100)+'%');await seek(v,i*st+.01);x.drawImage(v,0,0,32,56);
+  const px=x.getImageData(0,0,32,56).data,L=new Float32Array(32*56);let sb=0,ss=0,sat=0,top=[0,0,0],bot=[0,0,0];
+  for(let k=0;k<L.length;k++){const r=px[k*4],g=px[k*4+1],b=px[k*4+2],y=.3*r+.59*g+.11*b;L[k]=y;sb+=y;const mx=Math.max(r,g,b);sat+=mx?(mx-Math.min(r,g,b))/mx:0;const q=k<L.length/2?top:bot;q[0]+=r;q[1]+=g;q[2]+=b}
+  const m=sb/L.length;for(let k=0;k<L.length;k++)ss+=(L[k]-m)**2;
+  let d=0;if(prev){for(let k=0;k<L.length;k++)d+=Math.abs(L[k]-prev[k]);d/=L.length}
+  S.push({d,b:m,sd:Math.sqrt(ss/L.length),sat:sat/L.length,top:top.map(a=>a/(L.length/2)),bot:bot.map(a=>a/(L.length/2))});prev=L}
+ const ds=S.slice(1).map(s=>s.d),mean=ds.reduce((a,b)=>a+b,0)/ds.length,sdv=Math.sqrt(ds.reduce((a,b)=>a+(b-mean)**2,0)/ds.length),thr=Math.max(28,mean+2.5*sdv);
+ const cuts=[];let lastC=0,flash=0,calm=[];
+ for(let i=1;i<n;i++){const t=i*st;if(S[i].d>thr&&t-lastC>=.3){cuts.push(t);lastC=t;if(S[i].b-S[i-1].b>25)flash++}else calm.push(S[i].d)}
+ const edges=[0,...cuts,dur];if(dur-lastC<.3&&cuts.length)edges.splice(edges.length-2,1);
+ const segs=[];for(let i=1;i<edges.length;i++)segs.push(+(edges[i]-edges[i-1]).toFixed(2));
+ const avg=k=>S.reduce((a,s)=>a+s[k],0)/n,av3=k=>[0,1,2].map(j=>S.reduce((a,s)=>a+s[k][j],0)/n);
+ const bA=avg('b'),sdA=avg('sd'),satA=avg('sat'),tp=av3('top'),bt=av3('bot'),avgSeg=dur/segs.length,
+  motion=cl(calm.reduce((a,b)=>a+b,0)/Math.max(1,calm.length)/25,0,1),
+  boost=q=>{const m=(q[0]+q[1]+q[2])/3;return 'rgb('+q.map(a=>Math.round(cl(m+(a-m)*2.2,0,255))).join(',')+')'},
+  tr=cuts.length&&flash/cuts.length>.35?'flash':avgSeg<.7?'punch':'fade',
+  teal=tp[2]>tp[0]+8&&bt[0]>bt[2]+8;
+ P={cuts:segs,tr,z:.05+motion*.15,tint:true,a:boost(tp),b:boost(bt),
+  f:`contrast(${cl(.8+sdA/110,.9,1.4).toFixed(2)}) saturate(${cl(.6+satA*2,.8,1.6).toFixed(2)}) brightness(${cl(.7+bA/450,.75,1.1).toFixed(2)})`};
+ const lab={flash:'फ्लैश',punch:'ज़ूम पंच',fade:'फेड'}[tr],cutL=avgSeg<.6?'तेज़ कट':avgSeg<1.5?'मध्यम कट':'धीमे कट',
+  bl=bA<85?'डार्क टोन':bA>170?'ब्राइट':'नॉर्मल लाइट',gr=teal?'टील-ऑरेंज':satA<.2?'फीका / डिसैचुरेटेड':'नेचुरल';
+ const tags=a=>'<div class="tags">'+a.map(t=>'<span>'+t+'</span>').join('')+'</div>',
+  bar=(l,v,p)=>'<div class="bar"><div><span>'+l+'</span><span>'+v+'</span></div><i><u style="width:'+Math.round(p*100)+'%"></u></i></div>';
+ $('an').innerHTML='<div style="color:var(--ok);margin-bottom:6px">✓ पढ़ लिया</div><b>एडिटिंग स्टाइल</b>'+tags([cutL,sdA>55?'हाई कॉन्ट्रास्ट':'सॉफ्ट कॉन्ट्रास्ट',bl])+'<b>ट्रांज़िशन</b>'+tags([lab])+
+  bar('कट की औसत लंबाई',avgSeg.toFixed(2)+' सेकंड',cl(1-avgSeg/3,.05,1))+bar('मोशन',motion.toFixed(2),motion)+bar('कलर ग्रेड',gr,.8)+bar('ब्राइटनेस',Math.round(bA)+'/255',bA/255);
+ const rows=[['कट',segs.length],['ट्रांज़िशन',segs.length-1],['ट्रांज़िशन का तरीका',lab],['कलर ग्रेड',gr],['ज़ूम इफ़ेक्ट','लगा ✓'],['बीट सिंक','अभी नहीं']];
+ $('ap').innerHTML=rows.map(r=>'<tr><td>'+r[0]+'</td><td class="'+(String(r[1]).includes('✓')?'ok':'')+'">'+r[1]+'</td></tr>').join('');
+ renderStrip();last=-1;draw(0);msg('हो गया। प्रीव्यू चलाकर देखो।');$('go').disabled=false;start()};
+const pick=i=>files.length?files[i%files.length]:null;
+function renderStrip(){updateCost();const w=$('strip');w.innerHTML='';P.cuts.slice(0,40).forEach((d,i)=>{const m=pick(i),g=document.createElement('div');g.className='sg';
+ if(m){const x=document.createElement(m.v?'video':'img');x.src=m.u;if(m.v){x.muted=true;x.preload='metadata'}g.appendChild(x)}
+ const l=document.createElement('i');l.textContent=d+'s';g.appendChild(l);w.appendChild(g);if(i<P.cuts.length-1){const ch=document.createElement('div');ch.className='tc';ch.textContent='⇄';w.appendChild(ch)}})}
+function cover(e,s){const iw=e.videoWidth||e.naturalWidth,ih=e.videoHeight||e.naturalHeight;if(!iw)return;const k=Math.max(cv.width/iw,cv.height/ih)*s;c.drawImage(e,(cv.width-iw*k)/2,(cv.height-ih*k)/2,iw*k,ih*k)}
+function draw(t){let acc=0,i=0;for(;i<P.cuts.length;i++){if(t<acc+P.cuts[i])break;acc+=P.cuts[i]}
+ if(i>=P.cuts.length){i=P.cuts.length-1;acc=tot()-P.cuts[i]}
+ const loc=t-acc,fr=loc/P.cuts[i],m=pick(i);c.fillStyle='#05080a';c.fillRect(0,0,cv.width,cv.height);
+ if(!m){c.fillStyle='#8d98b8';c.font='700 20px Mukta,sans-serif';c.textAlign='center';c.fillText('क्लिप डालो',cv.width/2,cv.height/2);last=i;return}
+ if(m.v&&i!==last){files.forEach(f=>f.v&&f!==m&&f.e.pause());try{m.e.currentTime=0;m.e.play()}catch(_){}}
+ let s=1+P.z*fr;if(P.tr==='punch')s=1+P.z+.18-.18*Math.min(1,loc/.15)+P.z*fr*.3;
+ c.save();c.filter=P.f;cover(m.e,s);c.restore();
+ if(P.tint){c.save();c.globalCompositeOperation='soft-light';const g=c.createLinearGradient(0,0,0,cv.height);g.addColorStop(0,P.a);g.addColorStop(1,P.b);c.globalAlpha=.55;c.fillStyle=g;c.fillRect(0,0,cv.width,cv.height);c.restore()}
+ if(P.tr==='flash'&&i>0){c.fillStyle='rgba(255,255,255,'+Math.max(0,.85*(1-loc/.12))+')';c.fillRect(0,0,cv.width,cv.height)}
+ if(P.tr==='fade'&&P.tint){c.fillStyle='rgba(0,0,0,'+Math.max(0,1-loc/.25)*.6+')';c.fillRect(0,0,cv.width,cv.height)}
+ caption(i,loc);last=i}
+function caption(i,loc){const tx=($('cap').value.split('\n')[Math.floor(i/+$('cn').value)]||'').trim();if(!tx)return;
+ const sz=+$('csz').value,pos=$('cpos').value;c.save();c.font='800 '+sz+'px Mukta,sans-serif';c.textAlign='center';c.textBaseline='middle';c.lineJoin='round';
+ const mw=cv.width-48,ln=[];let cur='';for(const w of tx.split(/\s+/)){const t=cur?cur+' '+w:w;if(c.measureText(t).width>mw&&cur){ln.push(cur);cur=w}else cur=t}ln.push(cur);
+ const lh=sz*1.3,h=ln.length*lh,y0=pos==='b'?cv.height-120-h:pos==='t'?90:(cv.height-h)/2,k=Math.min(1,loc/.12);
+ c.globalAlpha=k;c.translate(cv.width/2,y0+h/2);c.scale(.9+.1*k,.9+.1*k);
+ ln.forEach((s,j)=>{const y=(j-(ln.length-1)/2)*lh;c.lineWidth=sz/4;c.strokeStyle='rgba(0,0,0,.85)';c.strokeText(s,0,y);c.fillStyle=$('ccol').value;c.fillText(s,0,y)});c.restore()}
+['cap','cn','cpos','csz','ccol'].forEach(id=>$(id).oninput=()=>{if(!playing)draw(0)});
+function loop(now){if(!playing)return;let t=(now-t0)/1000;if(t>=tot()){if(exporting){finish();return}t0=now;t=0;last=-1}draw(t);raf=requestAnimationFrame(loop)}
+function start(){playing=true;last=-1;t0=performance.now();$('play').textContent='❚❚ रोको';raf=requestAnimationFrame(loop)}
+function stop(){playing=false;cancelAnimationFrame(raf);files.forEach(f=>f.v&&f.e.pause());$('play').textContent='▶ चलाओ'}
+$('play').onclick=()=>playing?stop():start();
+function finish(){stop();exporting=false;rec&&rec.state!=='inactive'&&rec.stop()}
+function save(b,n){const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=n;a.click()}
+function doExport(){if(!files.length){msg('पहले क्लिप डालो।');return}const cc=cost();if(!spend(cc))return;
+ try{stop();chunks=[];rec=new MediaRecorder(cv.captureStream(30),{mimeType:MediaRecorder.isTypeSupported('video/webm')?'video/webm':''});
+  rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);
+  rec.onstop=async()=>{const bl=new Blob(chunks,{type:'video/webm'});
+   if(mp4){try{msg('सर्वर पर MP4 बन रहा है…');const fd=new FormData();fd.append('video',bl,'in.webm');const r=await api('/export',{method:'POST',body:fd});if(!r.ok)throw 0;save(await r.blob(),'mera-video.mp4');addPj('MP4',cc);msg('MP4 तैयार, डाउनलोड हो गया।')}catch(_){setCr(cr+cc);msg('सर्वर नहीं मिला, क्रेडिट वापस। पहले बैकएंड चलाओ (README देखो)।')}return}
+   save(bl,'mera-video.webm');addPj('WebM',cc);msg('वीडियो तैयार, डाउनलोड हो गया।')};
+  exporting=true;rec.start();msg('वीडियो बन रहा है, रुको…');start()}
+ catch(e){exporting=false;setCr(cr+cc);msg('इस ब्राउज़र में एक्सपोर्ट नहीं चलता। Chrome में खोलो।')}}
+$('exp').onclick=()=>{mp4=false;doExport()};$('exp2').onclick=()=>{mp4=true;doExport()};
+const API0=0;const RATE=1,MIN=5;const cost=()=>Math.max(MIN,Math.ceil(tot()*RATE));
+function updateCost(){$('exp').textContent='WebM · '+cost()+' क्रेडिट';$('exp2').textContent='MP4 · '+cost()+' क्रेडिट'}
+const UPI='shahjad2010@fam',NAME='Shahjad Ali',PLANS=[{c:120,p:99},{c:400,p:249},{c:1000,p:499}];let plan=PLANS[0],dev,cr=120,applied=0;
+try{dev=localStorage.cm_dev||(localStorage.cm_dev=Math.random().toString(36).slice(2)+Date.now().toString(36));if(localStorage.cm_cr!==undefined)cr=+localStorage.cm_cr;applied=+localStorage.cm_app||0}catch(_){dev='x'+Math.random().toString(36).slice(2)}
+function setCr(n){cr=n;try{localStorage.cm_cr=n}catch(_){}$('cr').textContent='🪙 '+n+' Credits';$('cr3').textContent=n}
+function spend(n){if(cr<n){openPay();return false}setCr(cr-n);return true}
+function openPay(){const w=$('pl');w.innerHTML='';PLANS.forEach((x,i)=>{const b=document.createElement('button');b.className='btn'+(i===1?' p':'');b.style.cssText='display:block;width:100%;margin:6px 0';b.textContent=x.c+' क्रेडिट · ₹'+x.p;b.onclick=()=>{$('plans').close();pickPlan(i)};w.appendChild(b)});$('plans').showModal()}
+$('plx').onclick=()=>$('plans').close();
+function pickPlan(i){plan=PLANS[i];const u='upi://pay?pa='+UPI+'&pn='+encodeURIComponent(NAME)+'&am='+plan.p+'&cu=INR&tn=ClipMatch-'+plan.c;$('upil').href=u;$('pr').textContent=plan.p;$('pc').textContent=plan.c;$('pm').textContent='';const q=$('qr');q.innerHTML='';
+ try{const o=new QRCode(document.createElement('div'),{text:u,width:64,height:64,correctLevel:QRCode.CorrectLevel.H}),M=o._oQRCode,n=M.getModuleCount(),Z=4,S=Math.floor(352/(n+2*Z)),W=S*(n+2*Z),cn=document.createElement('canvas');cn.width=cn.height=W;const x=cn.getContext('2d');
+  x.fillStyle='#fff';x.fillRect(0,0,W,W);x.fillStyle='#000';
+  for(let r=0;r<n;r++)for(let k=0;k<n;k++)if(M.isDark(r,k))x.fillRect((k+Z)*S,(r+Z)*S,S,S);
+  x.fillStyle='#fff';x.beginPath();x.arc(W/2,W/2,W*.085,0,7);x.fill();x.fillStyle='#111';x.font='800 '+Math.round(W*.05)+'px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('YES',W/2,W/2);q.appendChild(cn)}
+ catch(_){q.textContent='QR नहीं बना (इंटरनेट चाहिए)। UPI ID से पे करो।'}
+ $('pay').showModal()}
+$('cr').onclick=openPay;$('pcl').onclick=()=>$('pay').close();
+$('sub').onclick=async()=>{const u=$('utr').value.trim();if(!/^\d{10,16}$/.test(u)){$('pm').textContent='UTR में 12 अंक होने चाहिए।';return}
+ try{const r=await api('/payment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({utr:u,device:dev,want:plan.c,paid:plan.p})});
+  $('pm').textContent=r.ok?'✓ UTR मिल गया। वेरिफ़ाई होते ही क्रेडिट जुड़ जाएँगे।':(await r.text()).slice(0,90)}
+ catch(e){$('pm').textContent='पेमेंट सर्वर से कनेक्ट नहीं हुआ। बैकएंड चालू करके उसी लिंक से पेज खोलो।'}};
+$('cp').onclick=()=>{try{navigator.clipboard.writeText(UPI).then(()=>{$('cp').textContent='Copied'})}catch(_){}};
+async function sync(){try{const j=await(await api('/credits?device='+dev)).json();if(j.granted>applied){setCr(cr+j.granted-applied);applied=j.granted;try{localStorage.cm_app=applied}catch(_){}}}catch(_){}}
+setInterval(sync,15000);sync();setCr(cr);
+const esc=t=>String(t).replace(/[&<>"']/g,k=>'&#'+k.charCodeAt(0)+';');
+let pname='Guest';try{pname=localStorage.cm_name||'Guest'}catch(_){}
+const PJ=()=>{try{return JSON.parse(localStorage.cm_pj||'[]')}catch(_){return[]}};
+function addPj(f,c){try{const a=PJ();a.unshift({f,c,s:Math.round(tot()),d:new Date().toLocaleDateString('hi-IN')});localStorage.cm_pj=JSON.stringify(a.slice(0,30))}catch(_){}}
+function prof(){$('pn').textContent=pname;$('av').textContent=pname[0].toUpperCase();$('pid').textContent='ID: '+dev.slice(0,8)}
+function openDr(){$('dr').classList.add('open');$('sc').hidden=false}
+function closeDr(){$('dr').classList.remove('open');$('sc').hidden=true}
+$('hb').onclick=openDr;$('dx').onclick=closeDr;$('sc').onclick=closeDr;$('ic').onclick=()=>$('info').close();
+document.addEventListener('keydown',e=>e.key==='Escape'&&closeDr());
+function menu(m){closeDr();const t=$('it'),b=$('ib');
+ if(m==='price'){openPay();return}
+ if(m==='dash'){scrollTo({top:0,behavior:'smooth'});return}
+ if(m==='proj'){t.textContent='Projects';const a=PJ();b.innerHTML=a.length?a.map(p=>'<div class="pr"><b>'+esc(p.f)+' वीडियो</b><span>'+esc(p.s)+' सेकंड · '+esc(p.c)+' क्रेडिट · '+esc(p.d)+'</span></div>').join(''):'अभी कोई वीडियो एक्सपोर्ट नहीं हुआ।'}
+ if(m==='prof'){t.textContent='My profile';b.innerHTML='<label for="nm">नाम</label><input id="nm" maxlength="30"><p>क्रेडिट बचे: <b>'+cr+'</b></p><p>एक्सपोर्ट किए: <b>'+PJ().length+'</b></p><p class="sm">अभी लॉगिन नहीं है। प्रोफाइल और क्रेडिट इसी ब्राउज़र में सेव हैं।</p><button class="btn p" id="ns">Save</button>';$('nm').value=pname;
+  $('ns').onclick=()=>{pname=$('nm').value.trim()||'Guest';try{localStorage.cm_name=pname}catch(_){}prof();$('info').close()}}
+ if(m==='help'){t.textContent='Help';b.innerHTML='<ol style="padding-left:20px;margin:0"><li>रेफरेंस वीडियो डालो।</li><li>अपनी क्लिप या फ़ोटो डालो।</li><li>Analyze दबाओ, कट और कलर अपने आप लग जाएँगे।</li><li>कैप्शन लिखो और Export दबाओ।</li></ol><p class="sm">एक्सपोर्ट में हर सेकंड पर 1 क्रेडिट लगता है। MP4 के लिए बैकएंड चालू होना चाहिए।</p>'}
+ $('info').showModal()}
+document.querySelectorAll('[data-m]').forEach(x=>x.onclick=()=>menu(x.dataset.m));
+$('hx').onclick=()=>$('exp2').click();$('em').onclick=()=>$('cap').scrollIntoView({behavior:'smooth',block:'center'});prof();
+renderClips();renderStrip();draw(0);
+</script></body></html>
